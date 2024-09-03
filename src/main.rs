@@ -64,13 +64,13 @@ fn gen_waveform(sample_rate: u32, changes: Vec<Vec<u8>>, change_length: f32) -> 
 
     for i in 0..(sample_rate as f32 * changes.len() as f32 * change_length) as usize  {
         let t = i as f32 / sample_rate as f32;
-        if i >= (change_i + 1) * change_length as usize {
+        if i as f32 >= (change_i + 1) as f32 * change_length * sample_rate as f32 {
             change_i += 1;
         }
         println!("{} changei {} i {:?} change ", change_i, i, changes[change_i]);
         std::thread::sleep(Duration::from_secs(3));
         let f = if change_i == 0 { changes[0].iter().zip(vec![0, 0, 0].iter()).map(|(x, y)| (x * y) as f32).sum::<f32>() } else { changes[change_i].iter().zip(changes[change_i - 1].iter()).map(|(x, y)| (x * y) as f32).sum::<f32>() };
-        let sample = 2.0;//(2.0 * PI * f * t).sin();
+        let sample = (2.0 * PI * f + t).sin();
         wav.push(sample);
     }
     wav
