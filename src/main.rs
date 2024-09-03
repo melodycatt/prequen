@@ -68,6 +68,8 @@ fn gen_waveform(sample_rate: u32, changes: Vec<Vec<u8>>, change_length: f32) -> 
             change_i += 1;
         }
         println!("{} changei {} i {:?} change ", change_i, i, changes[change_i]);
+        if change_i > 0 { println!("{:?} zip ", changes[change_i].iter().zip(changes[change_i - 1].iter()).map(|(x, y)| {println!("{} x {} y", x, y); (x * y) as f32}).sum::<f32>() ) }; //FROM SUM
+
         let f = 
             if change_i == 0 { 
                 changes[0].iter().zip(vec![0, 0, 0].iter()).map(|(x, y)| (x * y) as f32).sum::<f32>()
